@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Integration-Payment/Integration-Payment.iml" filepath="$PROJECT_DIR$/Integration-Payment/Integration-Payment.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Integration-workspace.iml" filepath="$PROJECT_DIR$/.idea/Integration-workspace.iml" />
+      <module fileurl="file://$PROJECT_DIR$/IntegrationProducerDemo/IntegrationProducerDemo.iml" filepath="$PROJECT_DIR$/IntegrationProducerDemo/IntegrationProducerDemo.iml" />
+    </modules>
+  </component>
+</project>
