@@ -22,6 +22,8 @@ import java.util.Objects;
 @Configuration
 public class TcpServerConfig {
 
+    private static final String PRODUCER_TOPIC_NAME = "producer-transaction-started";
+
     private static final Logger log = LoggerFactory.getLogger(TcpServerConfig.class);
 
 
@@ -62,16 +64,20 @@ public class TcpServerConfig {
             public void handleMessage(Message<?> message) throws MessagingException {
                 String payload = new String((byte[]) message.getPayload());
                 String correlationId = transactionStatusService.saveTransactionLog(payload);
-                System.out.println("TCP Message Received: " + payload);
+
+                log.info("TCP Message Received. Data saved with given correlationId: {} data's flag has been set to 'W:Waiting' ", correlationId);
+
                 KafkaRequestDto dto = new KafkaRequestDto();
                 dto.setUUID(correlationId);
                 dto.setData(payload);
                 if (!Objects.isNull(correlationId)) {
                     try {
-                        kafkaProducerService.sendMessage("producer-transaction-started", dto);
-                        log.info("saved to db and send to kafka");
+                        kafkaProducerService.sendMessage(PRODUCER_TOPIC_NAME, dto);
+                        log.info(" Data saved with given correlationId: {} and send to '{}' topic", correlationId, PRODUCER_TOPIC_NAME);
+
                     } catch (Exception e) {
-                        log.error("error while sending kafka ! ERROR: " + e.getMessage());
+                        log.error("error while sending message to kafka with given entity with correlationId:{} .Error message is : {} ",
+                                correlationId, e.getMessage());
                     }
 
                 }

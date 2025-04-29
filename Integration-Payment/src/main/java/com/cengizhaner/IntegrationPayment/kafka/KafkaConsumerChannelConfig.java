@@ -15,6 +15,9 @@ import java.util.Map;
 @Configuration
 public class KafkaConsumerChannelConfig {
 
+    private static final String GROUP_ID_CONSUMER_DEMO_CONSUMER = "consumer-demo-consumer";
+    private static final String LOCALHOST_ADDRESS = "localhost:9092";
+
     public ConsumerFactory<String, KafkaIncomingMessage> getConsumerFactory() {
         return new DefaultKafkaConsumerFactory<>(consumerConfigs());
     }
@@ -24,9 +27,9 @@ public class KafkaConsumerChannelConfig {
         Map<String, Object> props = new HashMap<>();
 
         // Kafka broker address
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, LOCALHOST_ADDRESS);
         // Kafka Consumer Group ID
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "consumer-demo-consumer");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, GROUP_ID_CONSUMER_DEMO_CONSUMER);
         // Key deserializer
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         // Value deserializer: Deserialize the JSON data into KafkaIncomingMessageDto
@@ -39,12 +42,12 @@ public class KafkaConsumerChannelConfig {
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         // Specify trusted packages for JSON deserialization (can be restricted to specific packages)
         props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
-        props.put(ProducerConfig.ACKS_CONFIG, "all"); // güvenlik için tüm replication'lar onaylasın
+
+        props.put(ProducerConfig.ACKS_CONFIG, "all"); // approve from all replication for security
 
 
         return props;
     }
-
 
 
 }
