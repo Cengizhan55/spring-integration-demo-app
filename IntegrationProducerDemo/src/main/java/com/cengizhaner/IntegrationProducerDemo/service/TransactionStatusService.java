@@ -24,12 +24,13 @@ public class TransactionStatusService {
             TransactionStatusEntity transactionStatusEntity = new TransactionStatusEntity();
             transactionStatusEntity.setData(data);
             transactionStatusEntity.setTrxConditionFlag("W");
-            return transactionStatusRepository.save(transactionStatusEntity).getCorrelationId();
+            String correlationId = transactionStatusRepository.save(transactionStatusEntity).getCorrelationId();
+
+            log.info("Status: {}, CorrelationId: {}", "W: waiting status", correlationId);
+            return correlationId;
         } catch (Exception e) {
             log.error("error while saving db , data : " + data);
             return null;
         }
-
-
     }
 }

@@ -20,16 +20,16 @@ public class ApplicationFlows {
     private final KafkaConsumerChannelConfig kafkaConsumerChannelConfig;
 
     private final KafkaProducerChannelConfig kafkaProducerChannelConfig;
-    private final MessageHandlers messageHandlers;
 
-    public ApplicationFlows(KafkaConsumerChannelConfig kafkaConsumerChannelConfig, KafkaProducerChannelConfig kafkaProducerChannelConfig, MessageHandlers messageHandlers) {
+    private static final String TOPIC_NAME_PRODUCER_TRANSACTION_STARTED = "producer-transaction-started";
+    private static final String TOPIC_NAME_PRODUCER_TRANSACTION_COMPLETED = "producer-transaction-completed";
+
+
+    public ApplicationFlows(KafkaConsumerChannelConfig kafkaConsumerChannelConfig, KafkaProducerChannelConfig kafkaProducerChannelConfig) {
         this.kafkaConsumerChannelConfig = kafkaConsumerChannelConfig;
         this.kafkaProducerChannelConfig = kafkaProducerChannelConfig;
-        this.messageHandlers = messageHandlers;
+
     }
-
-
-    // producer-transaction-started
 
 
     @Bean
@@ -37,11 +37,11 @@ public class ApplicationFlows {
         return IntegrationFlow.from(
                         Kafka.messageDrivenChannelAdapter(
                                 kafkaConsumerChannelConfig.getConsumerFactory(),
-                                "producer-transaction-started"
+                                TOPIC_NAME_PRODUCER_TRANSACTION_STARTED
                         ).configureListenerContainer(c -> c.concurrency(10))
                 )
                 .channel("kafkaOutboundChannel")  // İşlenen mesajı çıkış kanalına yönlendirme
-             //   .handle(messageHandlers.kafkaInboundMessageHandler())
+                //   .handle(messageHandlers.kafkaInboundMessageHandler())
 
                 .get();
     }
@@ -52,19 +52,17 @@ public class ApplicationFlows {
         return new DirectChannel();
     }
 
-
     @Bean
     public IntegrationFlow kafkaOutboundFlow() {
-        return IntegrationFlow.from("kafkaOutboundChannel")                // İletilen mesajın geldiği kanal
+        return IntegrationFlow.from("kafkaOutboundChannel")
                 .transform(Message.class, this::modifyMessage)
                 .handle(Kafka.outboundChannelAdapter(kafkaProducerChannelConfig.getProducerFactory())
-                        .topic("producer-transaction-completed") // Mesajın gönderileceği output Kafka topic'i
-                        .messageKeyExpression("headers['kafka_receivedMessageKey']"))  // İsteğe bağlı: Orijinal mesaj anahtarını kullanma
+                        .topic(TOPIC_NAME_PRODUCER_TRANSACTION_COMPLETED) // topic that message will be sent.
+                        .messageKeyExpression("headers['kafka_receivedMessageKey']"))  // optional: using original message key
                 .get();
     }
 
     private KafkaOutgoingMessage modifyMessage(Message<KafkaIncomingMessage> message) {
-
 
         KafkaIncomingMessage dto = message.getPayload();
 
@@ -73,14 +71,4 @@ public class ApplicationFlows {
         outgoingMessage.setUUID(dto.getUUID());
         return outgoingMessage;
     }
-
-    /*
-
-
-
-
-
-     */
-
-
 }

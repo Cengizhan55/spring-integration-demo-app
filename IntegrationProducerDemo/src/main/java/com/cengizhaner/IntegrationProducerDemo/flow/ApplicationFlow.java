@@ -7,6 +7,8 @@ import com.cengizhaner.IntegrationProducerDemo.kafka.KafkaConsumerChannelConfig;
 import com.cengizhaner.IntegrationProducerDemo.kafka.KafkaProducerService;
 import com.cengizhaner.IntegrationProducerDemo.repository.TransactionStatusRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.kafka.dsl.Kafka;
@@ -16,8 +18,10 @@ import org.springframework.messaging.MessagingException;
 import org.springframework.stereotype.Component;
 
 @Component
-@Slf4j
+
 public class ApplicationFlow {
+
+    private static final Logger log = LoggerFactory.getLogger(ApplicationFlow.class);
 
     private final TcpServerConfig tcpServerConfig;
 
@@ -65,14 +69,12 @@ public class ApplicationFlow {
             public void handleMessage(Message<?> message) throws MessagingException {
 
                 KafkaIncomingMessage dto = (KafkaIncomingMessage) message.getPayload();
-
-                System.out.println("\"handleMEssage girdii i");
-
                 TransactionStatusEntity entity = repository.findByCorrelationId(dto.getUUID());
 
                 entity.setTrxConditionFlag("S");
                 repository.save(entity);
 
+                log.info("Kafka Response Handle Started. With given correlationId: {} data's flag has been updated to 'S:Succesful' ", dto.getUUID());
             }
         };
     }

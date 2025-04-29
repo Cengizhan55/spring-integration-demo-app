@@ -16,21 +16,23 @@ import java.util.Map;
 @Configuration
 public class KafkaProducerChannelConfig {
 
+    private static final String GROUP_ID_CONSUMER_DEMO_PRODUCER = "consumer-demo-producer";
+    private static final String LOCALHOST_ADDRESS = "localhost:9092";
+
 
     public DefaultKafkaProducerFactory<String, KafkaOutgoingMessage> getProducerFactory() {
         return new DefaultKafkaProducerFactory<>(producerConfigs());
     }
 
 
-
     @Bean
     public Map<String, Object> producerConfigs() {
         Map<String, Object> props = new HashMap<>();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092"); // Kafka broker adresi
-        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class); // key serileştirici
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "consumer-demo-producer");
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class); // value serileştirici
-        props.put(ProducerConfig.ACKS_CONFIG, "all"); // güvenlik için tüm replication'lar onaylasın
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, LOCALHOST_ADDRESS); // Kafka broker address
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class); // key serializer
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, GROUP_ID_CONSUMER_DEMO_PRODUCER);
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class); // value serializer
+        props.put(ProducerConfig.ACKS_CONFIG, "all"); // approve from all replication for security
         return props;
     }
 
