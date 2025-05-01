@@ -20,9 +20,10 @@ public class TransactionStatusEntity {
     @Column(name = "DATA")
     private String data;
 
+    private String correlationId;
 
-    private String correlationId; // buraya UUID gelecek
-
+    @Column(name = "TXN_CONDITION_FLAG")
+    private String TrxConditionFlag;
 
     public Long getId() {
         return id;
@@ -39,9 +40,6 @@ public class TransactionStatusEntity {
     public void setData(String data) {
         this.data = data;
     }
-
-    @Column(name = "TXN_CONDITION_FLAG")
-    private String TrxConditionFlag;
 
     public String getTrxConditionFlag() {
         return TrxConditionFlag;

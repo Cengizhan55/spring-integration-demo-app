@@ -1,14 +1,8 @@
 package com.cengizhaner.IntegrationPayment.dto;
 
 public class KafkaOutgoingMessage {
-
-
-
     private String UUID;
-
     private String message;
-
-
 
     public String getUUID() {
         return UUID;
