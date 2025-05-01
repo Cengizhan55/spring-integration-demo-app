@@ -11,6 +11,7 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletionStage;
 
 @Configuration
 public class KafkaConsumerChannelConfig {
@@ -44,7 +45,6 @@ public class KafkaConsumerChannelConfig {
         props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
 
         props.put(ProducerConfig.ACKS_CONFIG, "all"); // approve from all replication for security
-
 
         return props;
     }
