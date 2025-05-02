@@ -24,7 +24,6 @@ public class KafkaProducerChannelConfig {
         return new DefaultKafkaProducerFactory<>(producerConfigs());
     }
 
-
     @Bean
     public Map<String, Object> producerConfigs() {
         Map<String, Object> props = new HashMap<>();

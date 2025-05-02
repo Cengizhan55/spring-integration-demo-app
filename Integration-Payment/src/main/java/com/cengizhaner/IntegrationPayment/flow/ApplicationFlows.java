@@ -31,7 +31,6 @@ public class ApplicationFlows {
 
     }
 
-
     @Bean
     public IntegrationFlow incomingMessageFlow() {
         return IntegrationFlow.from(
@@ -45,7 +44,6 @@ public class ApplicationFlows {
 
                 .get();
     }
-
 
     @Bean
     MessageChannel kafkaOutboundChannel() {
