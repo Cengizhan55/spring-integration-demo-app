@@ -19,7 +19,6 @@ public class TransactionStatusEntity {
 
     @Column(name = "DATA")
     private String data;
-
     private String correlationId;
 
     @Column(name = "TXN_CONDITION_FLAG")

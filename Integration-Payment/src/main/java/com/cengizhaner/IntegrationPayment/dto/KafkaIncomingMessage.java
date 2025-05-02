@@ -14,7 +14,6 @@ public class KafkaIncomingMessage {
 
     private String UUID;
 
-
     public String getData() {
         return data;
     }

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class MessageHandlers {
 
-
     @Bean
     public MessageHandler kafkaInboundMessageHandler() {
 
@@ -20,11 +19,11 @@ public class MessageHandlers {
             public void handleMessage(Message<?> message) throws MessagingException {
 
                 KafkaIncomingMessage dto = (KafkaIncomingMessage) message.getPayload();
-                System.out.println("-----------------------------------------------------------");
+            //    System.out.println("-----------------------------------------------------------");
                 System.out.println("-----------------------------------------------------------");
                 System.out.println("Assumed that there is a business logic processed. Data uuid for processed Entity-> " + dto.getUUID());
                 System.out.println("-----------------------------------------------------------");
-                System.out.println("-----------------------------------------------------------");
+               // System.out.println("-----------------------------------------------------------");
 
             }
         };

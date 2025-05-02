@@ -23,10 +23,8 @@ public class KafkaConsumerChannelConfig {
         return new DefaultKafkaConsumerFactory<>(consumerConfigs());
     }
 
-
     public Map<String, Object> consumerConfigs() {
         Map<String, Object> props = new HashMap<>();
-
         // Kafka broker address
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, LOCALHOST_ADDRESS);
         // Kafka Consumer Group ID
