@@ -37,7 +37,7 @@ public class ApplicationFlows {
                         Kafka.messageDrivenChannelAdapter(
                                 kafkaConsumerChannelConfig.getConsumerFactory(),
                                 TOPIC_NAME_PRODUCER_TRANSACTION_STARTED
-                        ).configureListenerContainer(c -> c.concurrency(10))
+                        ).configureListenerContainer(c -> c.concurrency(1))
                 )
                 .channel("kafkaOutboundChannel")  // İşlenen mesajı çıkış kanalına yönlendirme
                 //   .handle(messageHandlers.kafkaInboundMessageHandler())
