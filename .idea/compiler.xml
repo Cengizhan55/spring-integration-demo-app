@@ -7,6 +7,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="TcpListenerDemo" />
       </profile>
       <profile name="Annotation profile for Integration-Payment" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -23,6 +24,7 @@
       <module name="Integration-Payment" target="19" />
       <module name="IntegrationConsumerDemo" target="19" />
       <module name="IntegrationProducerDemo" target="19" />
+      <module name="TcpListenerDemo" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
