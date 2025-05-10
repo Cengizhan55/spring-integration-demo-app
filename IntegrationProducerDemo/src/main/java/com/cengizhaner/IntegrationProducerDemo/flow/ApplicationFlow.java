@@ -55,7 +55,7 @@ public class ApplicationFlow {
                         Kafka.messageDrivenChannelAdapter(
                                 kafkaConsumerChannelConfig.getConsumerFactory(),
                                 "producer-transaction-completed"
-                        ).configureListenerContainer(c -> c.concurrency(10))
+                        ).configureListenerContainer(c -> c.concurrency(1))
                 )
                 .handle(handleKafkaResponse())
                 .get();
