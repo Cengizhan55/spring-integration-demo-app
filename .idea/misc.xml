@@ -6,6 +6,7 @@
         <option value="$PROJECT_DIR$/IntegrationProducerDemo/pom.xml" />
         <option value="$PROJECT_DIR$/IntegrationConsumerDemo/pom.xml" />
         <option value="$PROJECT_DIR$/Integration-Payment/pom.xml" />
+        <option value="$PROJECT_DIR$/TcpListenerDemo/pom.xml" />
       </list>
     </option>
   </component>
