@@ -17,7 +17,6 @@ import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 
-import java.nio.charset.StandardCharsets;
 
 @Component
 public class KafkaConsumerFlowConfig implements FlowConfig {
@@ -44,6 +43,7 @@ public class KafkaConsumerFlowConfig implements FlowConfig {
                                 "producer-transaction-completed"
                         ).configureListenerContainer(c -> c.concurrency(1))
                 )
+                .wireTap("tcpOutChannel")
                 .handle(handleKafkaResponse())
                 .get();
     }
@@ -60,17 +60,10 @@ public class KafkaConsumerFlowConfig implements FlowConfig {
 
                 entity.setTrxConditionFlag("S");
                 repository.save(entity);
-
-                tcpOutChannel().send(MessageBuilder.withPayload(
-                                dto.getUUID())
-                        .build());
                 log.info("Kafka Response Handle Started. With given correlationId: {} data's flag has been updated to 'S:Succesful' ", dto.getUUID());
             }
         };
     }
 
-    @Bean
-    public MessageChannel tcpOutChannel() {
-        return new DirectChannel();
-    }
+
 }

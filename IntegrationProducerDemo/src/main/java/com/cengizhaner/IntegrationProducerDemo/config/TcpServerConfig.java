@@ -35,7 +35,7 @@ public class TcpServerConfig {
 
     @Bean
     public TcpNetServerConnectionFactory serverConnectionFactory() {
-        TcpNetServerConnectionFactory factory = new TcpNetServerConnectionFactory(3456); // port
+        TcpNetServerConnectionFactory factory = new TcpNetServerConnectionFactory(3011); // port
         factory.setSerializer(new ByteArrayLengthHeaderSerializer());
         factory.setDeserializer(new ByteArrayElasticRawDeserializer());
         factory.setSoTimeout(10000);

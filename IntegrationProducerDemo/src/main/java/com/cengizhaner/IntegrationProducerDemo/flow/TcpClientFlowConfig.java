@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class TcpClientFlowConfig {
 
-   private final  Logger logger = LoggerFactory.getLogger(TcpClientFlowConfig.class) ;
+    private final Logger logger = LoggerFactory.getLogger(TcpClientFlowConfig.class);
 
     private final ApplicationContext context;
     private final ApplicationEventPublisher applicationEventPublisher;
@@ -36,7 +36,7 @@ public class TcpClientFlowConfig {
     @Bean
     public ThreadPoolTaskScheduler taskScheduler() {
         ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
-        scheduler.setPoolSize(2); // you can change it
+        scheduler.setPoolSize(10); // you can change it
         scheduler.setThreadNamePrefix("tcp-scheduler-");
         scheduler.initialize();
         return scheduler;
@@ -46,16 +46,16 @@ public class TcpClientFlowConfig {
     @Bean
     public TcpNioClientConnectionFactory tcpClientConnectionFactory() {
         TcpNioClientConnectionFactory factory = new TcpNioClientConnectionFactory(CLIENT_IP_ADDRESS, CLIENT_PORT);
-        factory.setSerializer((ByteArrayCrLfSerializer) context.getBean("byteArrayCrLfSerializer"));
-        factory.setDeserializer(new ByteArrayCrLfSerializer());
-        factory.setSingleUse(false); //In every message do not open new connection open/close. in this scenario keep open connection.
+        factory.setSerializer(byteArrayCrLfSerializer());
+        //factory.setDeserializer(new ByteArrayCrLfSerializer());
+        factory.setSingleUse(false); //In every message do not open new connection open/close. in this scenario  keep open connection.
         factory.setSoKeepAlive(true);
-        factory.setSoTimeout(5000); // 5000 ms.
+        factory.setSoTimeout(60000); // 5000 ms.
         factory.setApplicationContext(context);
         factory.setApplicationEventPublisher(applicationEventPublisher);
 
         factory.afterPropertiesSet(); // not necessary
-        factory.start();  // not necessary
+        //factory.start();  // not necessary
         return factory;
     }
 
@@ -67,6 +67,7 @@ public class TcpClientFlowConfig {
         handler.setConnectionFactory(tcpClientConnectionFactory());
         handler.setTaskScheduler(taskScheduler());
         handler.start();
+        handler.onError(new Exception("Error occurred while sending message to TCP client"));
         return handler;
     }
 
@@ -76,8 +77,10 @@ public class TcpClientFlowConfig {
     }
 
 
-
-
+    @Bean
+    public MessageChannel tcpOutChannel() {
+        return new DirectChannel();
+    }
 
     @Bean
     public IntegrationFlow tcpOutFlow() {
