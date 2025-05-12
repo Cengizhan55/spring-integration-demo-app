@@ -1,44 +1,36 @@
 package org.example;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.Socket;
+
+import java.io.*;
+import java.net.*;
 
 public class Main {
 
-    public static void main(String[] args) {
-        String serverIp = "127.0.0.1"; // TCP server IP
-        int serverPort = 3456;        // TCP server port
+    public static void main(String[] args) throws IOException {
+        int port = 3456;
+        ServerSocket serverSocket = new ServerSocket(port);
+        System.out.println("BT Entegrasyon TCP server dinleniyor, port: " + port);
 
-        Socket socket = null;
-        BufferedReader in = null;
-        OutputStream out = null;
+        while (true) {
+            Socket clientSocket = serverSocket.accept(); // Client bağlanana kadar bloklar
+            System.out.println("Client bağlandı: " + clientSocket.getInetAddress());
 
-        try {
-            socket = new Socket(serverIp, serverPort);  // Sunucuya bağlan
-            System.out.println("TCP sunucuya bağlandı: " + serverIp + ":" + serverPort);
+            new Thread(() -> handleClient(clientSocket)).start(); // Her client için ayrı thread
+        }
+    }
 
-            // Gelen mesajları okuyacak input stream
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
-            // Mesaj gönderecek output stream
-            out = socket.getOutputStream();
-            out.write("HELLO\r\n".getBytes());  // Sunucuya ilk mesaj gönderebiliriz
-
-            // Sunucudan gelen mesajları sürekli dinle
+    private static void handleClient(Socket socket) {
+        try (
+                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))
+        ) {
             String line;
-            while (true) {
-                if ((line = in.readLine()) != null) {
-                    System.out.println("Gelen mesaj: " + line);
-                }
+            while ((line = in.readLine()) != null) { // \r\n ile biten mesajları okur
+                System.out.println("Gelen mesaj: " + line);
             }
 
-        } catch (Exception e) {
-            System.err.println("TCP client hatası: " + e.getMessage());
-            e.printStackTrace();
-        } finally {
-            // Bağlantıyı kapatmak istemiyorsanız, socket'i burada kapatma.
-            // socket.close(); // Bu satır bağlantının kapanmasına sebep olur.
+            System.out.println("Bağlantı kapandı: " + socket.getInetAddress());
+
+        } catch (IOException e) {
+            System.err.println("Hata: " + e.getMessage());
         }
     }
 }
