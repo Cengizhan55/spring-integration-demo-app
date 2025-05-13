@@ -41,7 +41,7 @@ public class KafkaConsumerFlowConfig implements FlowConfig {
                         Kafka.messageDrivenChannelAdapter(
                                 kafkaConsumerChannelConfig.getConsumerFactory(),
                                 "producer-transaction-completed"
-                        ).configureListenerContainer(c -> c.concurrency(1))
+                        ).configureListenerContainer(c -> c.concurrency(10))
                 )
                 .wireTap("tcpOutChannel")
                 .handle(handleKafkaResponse())
