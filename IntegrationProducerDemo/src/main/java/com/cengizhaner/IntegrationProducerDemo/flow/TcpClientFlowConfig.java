@@ -1,6 +1,7 @@
 package com.cengizhaner.IntegrationProducerDemo.flow;
 
 
+import com.cengizhaner.IntegrationProducerDemo.dto.KafkaIncomingMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -36,7 +37,7 @@ public class TcpClientFlowConfig {
     @Bean
     public ThreadPoolTaskScheduler taskScheduler() {
         ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
-        scheduler.setPoolSize(10); // you can change it
+        scheduler.setPoolSize(1); // you can change it
         scheduler.setThreadNamePrefix("tcp-scheduler-");
         scheduler.initialize();
         return scheduler;
@@ -47,7 +48,7 @@ public class TcpClientFlowConfig {
     public TcpNioClientConnectionFactory tcpClientConnectionFactory() {
         TcpNioClientConnectionFactory factory = new TcpNioClientConnectionFactory(CLIENT_IP_ADDRESS, CLIENT_PORT);
         factory.setSerializer(byteArrayCrLfSerializer());
-        //factory.setDeserializer(new ByteArrayCrLfSerializer());
+      //  factory.setDeserializer(new ByteArrayCrLfSerializer());
         factory.setSingleUse(false); //In every message do not open new connection open/close. in this scenario  keep open connection.
         factory.setSoKeepAlive(true);
         factory.setSoTimeout(60000); // 5000 ms.
@@ -85,6 +86,7 @@ public class TcpClientFlowConfig {
     @Bean
     public IntegrationFlow tcpOutFlow() {
         return IntegrationFlow.from("tcpOutChannel") // The message comes from kafka send directly to client.
+                .transform(KafkaIncomingMessage.class, KafkaIncomingMessage::getData)
                 .handle(tcpOutbound())
                 .get();
     }
