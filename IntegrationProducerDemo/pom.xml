@@ -43,6 +43,14 @@
 			<artifactId>spring-integration-jpa</artifactId>
 		</dependency>
 
+		<!-- for generating random alphabetic chars contains commons.lang3 -->
+		<dependency>
+			<groupId>com.github.javafaker</groupId>
+			<artifactId>javafaker</artifactId>
+			<version>1.0.2</version>
+		</dependency>
+		<!-- for generating random alphabetic chars contains commons.lang3 -->
+
 
 		<dependency>
 			<groupId>org.postgresql</groupId>

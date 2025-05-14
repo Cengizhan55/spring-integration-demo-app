@@ -1,5 +1,6 @@
 package com.cengizhaner.IntegrationProducerDemo.config;
 
+import com.cengizhaner.IntegrationProducerDemo.deserializer.CustomTcpInboundDeserializer;
 import com.cengizhaner.IntegrationProducerDemo.dto.KafkaRequestDto;
 import com.cengizhaner.IntegrationProducerDemo.kafka.KafkaProducerService;
 import com.cengizhaner.IntegrationProducerDemo.service.TransactionStatusService;
@@ -9,8 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.channel.DirectChannel;
 import org.springframework.integration.ip.tcp.TcpInboundGateway;
-import org.springframework.integration.ip.tcp.connection.TcpNetServerConnectionFactory;
-import org.springframework.integration.ip.tcp.serializer.ByteArrayElasticRawDeserializer;
+import org.springframework.integration.ip.tcp.connection.TcpNioServerConnectionFactory;
 import org.springframework.integration.ip.tcp.serializer.ByteArrayLengthHeaderSerializer;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -34,10 +34,10 @@ public class TcpServerConfig {
     }
 
     @Bean
-    public TcpNetServerConnectionFactory serverConnectionFactory() {
-        TcpNetServerConnectionFactory factory = new TcpNetServerConnectionFactory(3011); // port
+    public TcpNioServerConnectionFactory serverConnectionFactory() {
+        TcpNioServerConnectionFactory factory = new TcpNioServerConnectionFactory(3011); // port
         factory.setSerializer(new ByteArrayLengthHeaderSerializer());
-        factory.setDeserializer(new ByteArrayElasticRawDeserializer());
+        factory.setDeserializer(new CustomTcpInboundDeserializer());
         factory.setSoTimeout(10000);
 
         return factory;
@@ -56,13 +56,13 @@ public class TcpServerConfig {
         return gateway;
     }
 
-    // Gelen mesajları karşılayan handler
+
     @Bean
     public MessageHandler messageHandler(KafkaProducerService kafkaProducerService) {
         return new MessageHandler() {
             @Override
             public void handleMessage(Message<?> message) throws MessagingException {
-                String payload = new String((byte[]) message.getPayload());
+                String payload = message.getPayload().toString();
                 String correlationId = transactionStatusService.saveTransactionLog(payload);
 
                 log.info("TCP Message Received. Data saved with given correlationId: {} data's flag has been set to 'W:Waiting' ", correlationId);
