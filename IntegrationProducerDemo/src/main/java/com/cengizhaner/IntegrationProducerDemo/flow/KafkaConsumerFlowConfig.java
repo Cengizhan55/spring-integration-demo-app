@@ -7,14 +7,11 @@ import com.cengizhaner.IntegrationProducerDemo.repository.TransactionStatusRepos
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
-import org.springframework.integration.channel.DirectChannel;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.kafka.dsl.Kafka;
 import org.springframework.messaging.Message;
-import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessagingException;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 
 
@@ -22,18 +19,13 @@ import org.springframework.stereotype.Component;
 public class KafkaConsumerFlowConfig implements FlowConfig {
 
     private static final Logger log = LoggerFactory.getLogger(FlowConfig.class);
-
-
     private final TransactionStatusRepository repository;
-
-
     private final KafkaConsumerChannelConfig kafkaConsumerChannelConfig;
 
     public KafkaConsumerFlowConfig(TransactionStatusRepository repository, KafkaConsumerChannelConfig kafkaConsumerChannelConfig) {
         this.repository = repository;
         this.kafkaConsumerChannelConfig = kafkaConsumerChannelConfig;
     }
-
 
     @Bean
     public IntegrationFlow incomingMessageFlow() {
@@ -43,9 +35,8 @@ public class KafkaConsumerFlowConfig implements FlowConfig {
                                 "producer-transaction-completed"
                         ).configureListenerContainer(c -> c.concurrency(1))
                 )
-              //  .wireTap("tcpOutChannel")
+                //  .wireTap("tcpOutChannel")
                 .handle(handleKafkaResponse())
-
                 .get();
     }
 
@@ -65,6 +56,4 @@ public class KafkaConsumerFlowConfig implements FlowConfig {
             }
         };
     }
-
-
 }
