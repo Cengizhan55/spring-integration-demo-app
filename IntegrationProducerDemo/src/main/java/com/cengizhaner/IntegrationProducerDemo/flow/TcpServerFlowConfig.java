@@ -6,13 +6,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.stereotype.Component;
 
-
 @Component
 public class TcpServerFlowConfig implements FlowConfig {
 
-
     private final TcpServerConfig tcpServerConfig;
-
     private final KafkaProducerService kafkaProducerService;
 
     public TcpServerFlowConfig(TcpServerConfig tcpServerConfig, KafkaProducerService kafkaProducerService) {
@@ -22,7 +19,6 @@ public class TcpServerFlowConfig implements FlowConfig {
 
     @Bean
     public IntegrationFlow tcpInboundFlow() {
-
         return IntegrationFlow.from(tcpServerConfig.tcpInboundGateway())
                 .handle(tcpServerConfig.messageHandler(kafkaProducerService))
                 .get();

@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.integration.channel.DirectChannel;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.ip.tcp.TcpSendingMessageHandler;
-import org.springframework.integration.ip.tcp.connection.TcpNetClientConnectionFactory;
 import org.springframework.integration.ip.tcp.connection.TcpNioClientConnectionFactory;
 import org.springframework.integration.ip.tcp.serializer.ByteArrayCrLfSerializer;
 import org.springframework.messaging.MessageChannel;
@@ -48,13 +47,12 @@ public class TcpClientFlowConfig {
     public TcpNioClientConnectionFactory tcpClientConnectionFactory() {
         TcpNioClientConnectionFactory factory = new TcpNioClientConnectionFactory(CLIENT_IP_ADDRESS, CLIENT_PORT);
         factory.setSerializer(byteArrayCrLfSerializer());
-      //  factory.setDeserializer(new ByteArrayCrLfSerializer());
+        //  factory.setDeserializer(new ByteArrayCrLfSerializer());
         factory.setSingleUse(false); //In every message do not open new connection open/close. in this scenario  keep open connection.
         factory.setSoKeepAlive(true);
         factory.setSoTimeout(60000); // 5000 ms.
         factory.setApplicationContext(context);
         factory.setApplicationEventPublisher(applicationEventPublisher);
-
         factory.afterPropertiesSet(); // not necessary
         //factory.start();  // not necessary
         return factory;
@@ -77,7 +75,6 @@ public class TcpClientFlowConfig {
         return new ByteArrayCrLfSerializer();
     }
 
-
     @Bean
     public MessageChannel tcpOutChannel() {
         return new DirectChannel();
@@ -90,5 +87,4 @@ public class TcpClientFlowConfig {
                 .handle(tcpOutbound())
                 .get();
     }
-
 }
