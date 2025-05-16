@@ -1,7 +1,12 @@
 package com.cengizhaner.IntegrationProducerDemo.entity;
 
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
 
 import java.util.UUID;
 
@@ -16,7 +21,7 @@ public class TransactionStatusEntity {
     @Column(name = "DATA")
     private String data;
 
-    private String correlationId; // buraya UUID gelecek
+    private String correlationId;
 
     public Long getId() {
         return id;
