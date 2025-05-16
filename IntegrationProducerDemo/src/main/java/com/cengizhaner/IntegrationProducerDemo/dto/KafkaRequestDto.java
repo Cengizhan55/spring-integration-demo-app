@@ -1,8 +1,5 @@
 package com.cengizhaner.IntegrationProducerDemo.dto;
 
-
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-
 public class KafkaRequestDto {
 
     public KafkaRequestDto() {
@@ -14,9 +11,7 @@ public class KafkaRequestDto {
     }
 
     private String data;
-
     private String UUID;
-
 
     public String getData() {
         return data;

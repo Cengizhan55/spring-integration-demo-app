@@ -1,6 +1,5 @@
 package com.cengizhaner.IntegrationProducerDemo.dto;
 
-
 public class KafkaIncomingMessage {
 
     public KafkaIncomingMessage() {
@@ -12,9 +11,7 @@ public class KafkaIncomingMessage {
     }
 
     private String data;
-
     private String UUID;
-
 
     public String getData() {
         return data;
@@ -31,6 +28,4 @@ public class KafkaIncomingMessage {
     public void setUUID(String UUID) {
         this.UUID = UUID;
     }
-
-
 }
