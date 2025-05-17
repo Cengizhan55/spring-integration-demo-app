@@ -1,7 +1,5 @@
 package com.cengizhaner.IntegrationProducerDemo.kafka;
 
-// KafkaProducerService.java
-
 import com.cengizhaner.IntegrationProducerDemo.dto.KafkaRequestDto;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
