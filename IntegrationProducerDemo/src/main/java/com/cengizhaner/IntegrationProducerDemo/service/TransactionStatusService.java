@@ -1,6 +1,5 @@
 package com.cengizhaner.IntegrationProducerDemo.service;
 
-
 import com.cengizhaner.IntegrationProducerDemo.entity.TransactionStatusEntity;
 import com.cengizhaner.IntegrationProducerDemo.repository.TransactionStatusRepository;
 import org.slf4j.Logger;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 public class TransactionStatusService {
 
     private static final Logger log = LoggerFactory.getLogger(TransactionStatusService.class);
-
     private final TransactionStatusRepository transactionStatusRepository;
 
 

@@ -37,7 +37,7 @@ public class TcpClientFlowConfig {
     public ThreadPoolTaskScheduler taskScheduler() {
         ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
         scheduler.setPoolSize(1); // you can change it
-        scheduler.setThreadNamePrefix("tcp-scheduler-");
+        scheduler.setThreadNamePrefix("tcp-MyThreadPoolTaskScheduler-");
         scheduler.initialize();
         return scheduler;
     }
@@ -50,7 +50,7 @@ public class TcpClientFlowConfig {
         //  factory.setDeserializer(new ByteArrayCrLfSerializer());
         factory.setSingleUse(false); //In every message do not open new connection open/close. in this scenario  keep open connection.
         factory.setSoKeepAlive(true);
-        factory.setSoTimeout(60000); // 5000 ms.
+        factory.setSoTimeout(60000); // 60.000 ms.
         factory.setApplicationContext(context);
         factory.setApplicationEventPublisher(applicationEventPublisher);
         factory.afterPropertiesSet(); // not necessary
