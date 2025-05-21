@@ -10,10 +10,11 @@ public class Main {
         ServerSocket serverSocket = new ServerSocket(port);
         System.out.println("BT Entegrasyon TCP server dinleniyor, port: " + port);
 
+
+
         while (true) {
             Socket clientSocket = serverSocket.accept(); // blocks until clients connects
             System.out.println("Client bağlandı: " + clientSocket.getInetAddress());
-
             new Thread(() -> handleClient(clientSocket)).start(); // Different thread for each client
         }
     }
