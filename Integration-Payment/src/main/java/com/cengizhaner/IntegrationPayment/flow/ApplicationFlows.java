@@ -18,12 +18,9 @@ import org.springframework.stereotype.Service;
 public class ApplicationFlows {
 
     private final KafkaConsumerChannelConfig kafkaConsumerChannelConfig;
-
     private final KafkaProducerChannelConfig kafkaProducerChannelConfig;
-
     private static final String TOPIC_NAME_PRODUCER_TRANSACTION_STARTED = "producer-transaction-started";
     private static final String TOPIC_NAME_PRODUCER_TRANSACTION_COMPLETED = "producer-transaction-completed";
-
 
     public ApplicationFlows(KafkaConsumerChannelConfig kafkaConsumerChannelConfig, KafkaProducerChannelConfig kafkaProducerChannelConfig) {
         this.kafkaConsumerChannelConfig = kafkaConsumerChannelConfig;
@@ -41,7 +38,6 @@ public class ApplicationFlows {
                 )
                 .channel("kafkaOutboundChannel")  // İşlenen mesajı çıkış kanalına yönlendirme
                 //   .handle(messageHandlers.kafkaInboundMessageHandler())
-
                 .get();
     }
 
