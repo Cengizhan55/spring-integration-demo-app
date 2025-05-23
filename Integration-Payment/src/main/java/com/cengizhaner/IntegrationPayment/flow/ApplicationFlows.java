@@ -27,9 +27,6 @@ public class ApplicationFlows {
         this.kafkaProducerChannelConfig = kafkaProducerChannelConfig;
 
     }
-    
-    
-    
 
     @Bean
     public IntegrationFlow incomingMessageFlow() {
