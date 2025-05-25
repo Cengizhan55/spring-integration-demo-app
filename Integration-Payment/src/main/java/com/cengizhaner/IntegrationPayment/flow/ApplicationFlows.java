@@ -27,7 +27,6 @@ public class ApplicationFlows {
         this.kafkaProducerChannelConfig = kafkaProducerChannelConfig;
 
     }
-
     @Bean
     public IntegrationFlow incomingMessageFlow() {
         return IntegrationFlow.from(
@@ -45,7 +44,6 @@ public class ApplicationFlows {
     MessageChannel kafkaOutboundChannel() {
         return new DirectChannel();
     }
-
     @Bean
     public IntegrationFlow kafkaOutboundFlow() {
         return IntegrationFlow.from("kafkaOutboundChannel")
@@ -58,6 +56,11 @@ public class ApplicationFlows {
 
     private KafkaOutgoingMessage modifyMessage(Message<KafkaIncomingMessage> message) {
 
+        KafkaOutgoingMessage outgoingMessage = getKafkaOutgoingMessage(message);
+        return outgoingMessage;
+    }
+
+    private static KafkaOutgoingMessage getKafkaOutgoingMessage(Message<KafkaIncomingMessage> message) {
         KafkaIncomingMessage dto = message.getPayload();
 
         KafkaOutgoingMessage outgoingMessage = new KafkaOutgoingMessage();
