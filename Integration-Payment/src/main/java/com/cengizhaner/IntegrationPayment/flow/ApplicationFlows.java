@@ -35,8 +35,8 @@ public class ApplicationFlows {
                                 TOPIC_NAME_PRODUCER_TRANSACTION_STARTED
                         ).configureListenerContainer(c -> c.concurrency(1))
                 )
-                .channel("kafkaOutboundChannel")  // İşlenen mesajı çıkış kanalına yönlendirme
-                //   .handle(messageHandlers.kafkaInboundMessageHandler())
+                .channel("kafkaOutboundChannel")  // Redirecting the processsed message to out channel
+                //.handle(messageHandlers.kafkaInboundMessageHandler())
                 .get();
     }
 
