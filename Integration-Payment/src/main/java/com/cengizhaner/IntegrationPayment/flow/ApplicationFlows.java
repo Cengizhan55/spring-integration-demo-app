@@ -34,10 +34,10 @@ public class ApplicationFlows {
                                 kafkaConsumerChannelConfig.getConsumerFactory(),
                                 TOPIC_NAME_PRODUCER_TRANSACTION_STARTED
                         ).configureListenerContainer(c -> c.concurrency(1))
-                )
-                .channel("kafkaOutboundChannel")  // Redirecting the processsed message to out channel
+                ).channel("kafkaOutboundChannel")  // Redirecting the processsed message to out channel
                 //.handle(messageHandlers.kafkaInboundMessageHandler())
                 .get();
+
     }
 
     @Bean
