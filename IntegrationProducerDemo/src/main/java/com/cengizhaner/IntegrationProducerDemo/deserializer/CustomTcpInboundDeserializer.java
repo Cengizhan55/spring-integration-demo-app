@@ -12,8 +12,6 @@ import java.io.InputStreamReader;
 @Component
 public class CustomTcpInboundDeserializer implements Deserializer<String> {
 
-
-
     @Override
     public String deserialize(InputStream inputStream) throws IOException {
         StringBuilder sb = new StringBuilder();
