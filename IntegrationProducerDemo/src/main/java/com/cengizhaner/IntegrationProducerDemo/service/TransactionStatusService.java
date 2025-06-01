@@ -27,8 +27,12 @@ public class TransactionStatusService {
 
             return correlationId;
         } catch (Exception e) {
-            log.error("error while saving db , data : " + data);
+        //    log.error("error while saving db , data : " + data);
             return null;
         }
+
+
+
+
     }
 }
