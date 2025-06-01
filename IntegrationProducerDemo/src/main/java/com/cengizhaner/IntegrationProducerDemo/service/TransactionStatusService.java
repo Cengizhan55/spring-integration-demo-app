@@ -12,7 +12,6 @@ public class TransactionStatusService {
     private static final Logger log = LoggerFactory.getLogger(TransactionStatusService.class);
     private final TransactionStatusRepository transactionStatusRepository;
 
-
     public TransactionStatusService(TransactionStatusRepository transactionStatusRepository) {
         this.transactionStatusRepository = transactionStatusRepository;
     }
@@ -23,8 +22,8 @@ public class TransactionStatusService {
             transactionStatusEntity.setData(data);
             transactionStatusEntity.setTrxConditionFlag("W");
             String correlationId = transactionStatusRepository.save(transactionStatusEntity).getCorrelationId();
+           // log.info("Status: {}, CorrelationId: {}", "W: waiting status", correlationId);
 
-            log.info("Status: {}, CorrelationId: {}", "W: waiting status", correlationId);
             return correlationId;
         } catch (Exception e) {
             log.error("error while saving db , data : " + data);
