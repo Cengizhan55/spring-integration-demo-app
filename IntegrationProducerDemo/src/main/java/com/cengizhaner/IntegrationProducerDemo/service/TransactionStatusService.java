@@ -16,8 +16,6 @@ public class TransactionStatusService {
         this.transactionStatusRepository = transactionStatusRepository;
     }
 
-    
-    
 
 
 
@@ -28,8 +26,6 @@ public class TransactionStatusService {
             transactionStatusEntity.setTrxConditionFlag("W");
             String correlationId = transactionStatusRepository.save(transactionStatusEntity).getCorrelationId();
             log.info("Status: {}, CorrelationId: {}", "W: waiting status", correlationId);
-
-
 
             return correlationId;
         } catch (Exception e) {
