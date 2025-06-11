@@ -16,7 +16,6 @@ public class TransactionStatusService {
         this.transactionStatusRepository = transactionStatusRepository;
     }
 
-
     public String saveTransactionLog(String data) {
         try {
             TransactionStatusEntity transactionStatusEntity = new TransactionStatusEntity();
