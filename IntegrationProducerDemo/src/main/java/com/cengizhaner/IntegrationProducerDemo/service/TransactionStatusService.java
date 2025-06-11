@@ -16,7 +16,6 @@ public class TransactionStatusService {
         this.transactionStatusRepository = transactionStatusRepository;
     }
 
-
     public String saveTransactionLog(String data) {
         try {
             TransactionStatusEntity transactionStatusEntity = new TransactionStatusEntity();
@@ -27,7 +26,9 @@ public class TransactionStatusService {
 
             return correlationId;
         } catch (Exception e) {
-            log.error("error while saving db , data : " + data);
+            log.info("error while saving db , data : " + data);
+            log.info("------------");
+
             return null;
         }
 
