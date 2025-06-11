@@ -27,6 +27,8 @@ public class TransactionStatusService {
             return correlationId;
         } catch (Exception e) {
             log.info("error while saving db , data : " + data);
+            log.info("------------");
+
             return null;
         }
 
