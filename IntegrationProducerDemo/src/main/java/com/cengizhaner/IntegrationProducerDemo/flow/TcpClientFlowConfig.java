@@ -2,16 +2,22 @@ package com.cengizhaner.IntegrationProducerDemo.flow;
 
 
 import com.cengizhaner.IntegrationProducerDemo.dto.KafkaIncomingMessage;
+import org.aopalliance.aop.Advice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
+import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.channel.DirectChannel;
 import org.springframework.integration.dsl.IntegrationFlow;
+import org.springframework.integration.handler.advice.RequestHandlerRetryAdvice;
 import org.springframework.integration.ip.tcp.TcpSendingMessageHandler;
+import org.springframework.integration.ip.tcp.connection.AbstractClientConnectionFactory;
+import org.springframework.integration.ip.tcp.connection.TcpNetClientConnectionFactory;
 import org.springframework.integration.ip.tcp.connection.TcpNioClientConnectionFactory;
 import org.springframework.integration.ip.tcp.serializer.ByteArrayCrLfSerializer;
+import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHandler;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
@@ -32,6 +38,50 @@ public class TcpClientFlowConfig {
         this.context = context;
         this.applicationEventPublisher = applicationEventPublisher;
     }
+
+
+    @Bean
+    public IntegrationFlow tcpTransformerFlow() {
+        return IntegrationFlow.from("tcpOutChannel")
+
+                .transform(Message.class, message -> {
+                    KafkaIncomingMessage payload = (KafkaIncomingMessage) message.getPayload();
+                    return "TXN:" + payload.getUUID(); // example tcp message
+                })
+                .handle(tcpOutbound(), e -> e.advice(retrySuppressingAdvice())) // 👈 Ekledik
+                .get();
+    }
+
+    @Bean
+    public Advice retrySuppressingAdvice() {
+        return new RequestHandlerRetryAdvice() {{
+            setRecoveryCallback(context -> {
+                logger.warn("A TCP connection error occurred, but we are preventing Kafka from retrying.");
+                return null; // swallow the exception
+            });
+        }};
+    }
+
+    @Bean
+    public AbstractClientConnectionFactory tcpClientConnectionFactory() {
+        TcpNetClientConnectionFactory factory = new TcpNetClientConnectionFactory("localhost", 3011);
+        factory.setSingleUse(false); // do not close connection and use again
+        factory.setSoTimeout(5000);
+        factory.setApplicationEventPublisher(applicationEventPublisher);
+
+        return factory;
+    }
+
+    @Bean
+    @ServiceActivator(inputChannel = "tcpOutChannel")
+    public MessageHandler tcpOutbound() {
+        TcpSendingMessageHandler handler = new TcpSendingMessageHandler();
+        handler.setConnectionFactory(tcpClientConnectionFactory());
+        return handler;
+    }
+
+
+/*
 
     @Bean
     public ThreadPoolTaskScheduler taskScheduler() {
@@ -88,4 +138,6 @@ public class TcpClientFlowConfig {
                 .handle(tcpOutbound())
                 .get();
     }
+
+ */
 }
