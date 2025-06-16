@@ -4,10 +4,12 @@ import com.cengizhaner.IntegrationProducerDemo.dto.KafkaIncomingMessage;
 import com.cengizhaner.IntegrationProducerDemo.entity.TransactionStatusEntity;
 import com.cengizhaner.IntegrationProducerDemo.kafka.KafkaConsumerChannelConfig;
 import com.cengizhaner.IntegrationProducerDemo.repository.TransactionStatusRepository;
+import org.aopalliance.aop.Advice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.integration.dsl.IntegrationFlow;
+import org.springframework.integration.handler.advice.RequestHandlerRetryAdvice;
 import org.springframework.integration.kafka.dsl.Kafka;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHandler;
@@ -35,10 +37,23 @@ public class KafkaConsumerFlowConfig implements FlowConfig {
                                 "producer-transaction-completed"
                         ).configureListenerContainer(c -> c.concurrency(1))
                 )
-                //  .wireTap("tcpOutChannel")
-                .handle(handleKafkaResponse())
+              //  .wireTap("tcpOutChannel")
+                .publishSubscribeChannel(p -> p
+                        .subscribe(s -> s.handle(handleKafkaResponse()))
+                        .subscribe(s -> s.channel("tcpOutChannel"))
+                )
+             //   .handle(handleKafkaResponse())
                 .get();
     }
+
+
+
+
+
+    /*
+
+
+     */
 
 
     @Bean
