@@ -39,6 +39,7 @@ public class TcpServerConfig {
         factory.setSerializer(new ByteArrayLengthHeaderSerializer());
         factory.setDeserializer(new CustomTcpInboundDeserializer());
         factory.setSoTimeout(10000);
+        factory.afterPropertiesSet();
 
         return factory;
     }
