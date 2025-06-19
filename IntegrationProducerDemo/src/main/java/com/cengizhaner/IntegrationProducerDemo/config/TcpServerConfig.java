@@ -40,6 +40,7 @@ public class TcpServerConfig {
         factory.setDeserializer(new CustomTcpInboundDeserializer());
         factory.setSoTimeout(10000);
         factory.afterPropertiesSet();
+        factory.setSingleUse(false);
 
         return factory;
     }
