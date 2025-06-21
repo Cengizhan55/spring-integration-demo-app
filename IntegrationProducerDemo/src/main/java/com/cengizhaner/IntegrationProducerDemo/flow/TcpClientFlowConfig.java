@@ -43,12 +43,11 @@ public class TcpClientFlowConfig {
     @Bean
     public IntegrationFlow tcpTransformerFlow() {
         return IntegrationFlow.from("tcpOutChannel")
-
                 .transform(Message.class, message -> {
                     KafkaIncomingMessage payload = (KafkaIncomingMessage) message.getPayload();
                     return "TXN:" + payload.getUUID(); // example tcp message
                 })
-                .handle(tcpOutbound(), e -> e.advice(retrySuppressingAdvice())) // 👈 Ekledik
+                .handle(tcpOutbound(), e -> e.advice(retrySuppressingAdvice())) // added
                 .get();
     }
 

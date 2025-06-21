@@ -55,6 +55,7 @@ public class TcpServerConfig {
         TcpInboundGateway gateway = new TcpInboundGateway();
         gateway.setConnectionFactory(serverConnectionFactory());
         gateway.setRequestChannel(tcpInboundChannel());
+        gateway.setAutoStartup(true);
         return gateway;
     }
 
@@ -72,7 +73,7 @@ public class TcpServerConfig {
                 KafkaRequestDto dto = new KafkaRequestDto();
                 dto.setUUID(correlationId);
                 dto.setData(payload);
-                if (!Objects.isNull(correlationId)) {
+                if (Objects.nonNull(correlationId)) { // use Objects.nonNull for null check consistency
                     try {
                         kafkaProducerService.sendMessage(PRODUCER_TOPIC_NAME, dto);
                         log.info(" Data saved with given correlationId: {} and send to '{}' topic", correlationId, PRODUCER_TOPIC_NAME);
